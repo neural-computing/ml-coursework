@@ -87,3 +87,4 @@ validationPredictions = kfoldPredict(partitionedModel);
 
 % Compute validation RMSE
 validationRMSE = sqrt(kfoldLoss(partitionedModel, 'LossFun', 'mse'));
+validationRMSE = sqrt(kfoldLoss(partitionedModel, 'LossFun', crossValidationLossFun));
