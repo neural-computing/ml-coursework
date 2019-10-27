@@ -8,17 +8,17 @@ inputTable = readtable("../data/Concrete_Data.csv");
 % Extract predictors and response
 % This code processes the data into the right shape for training the
 % model.
-predictorNames = inputTable.Properties.VariableNames{1,1:8};
+predictorNames = inputTable.Properties.VariableNames(1,1:8);
 predictors = inputTable(:, predictorNames);
-response = inputTable{:,9};
+response = inputTable.Concrete_Compressive_Strength_Mpa;
 
 %Print out head of table
-inputTable(1:10,:)
+display(inputTable(1:10,:))
 %% 
 % Apply T-SNE to allow us to visualise the dataset
 
 %Apply Stochastic Neighbour Embedding for Dimentionality Reduction
-Y = tsne(table2array(predictors),'Distance', "cosine",'Standardize',true);
+Y = tsne(table2array(predictors),'Distance', "cosine",'Standardize',true,"Perplexity",50);
 bins = 20;
 max(response)
 min(response)
@@ -39,7 +39,8 @@ ax(plotSize,k).XLabel.HorizontalAlignment = 'right';
 end
 
 %we can also compute the correlation between all features including the response variable 
-correlationMatrix = corr(table2array(inputTable))
+correlationMatrix = corr(table2array(inputTable));
+display(correlationMatrix)
 %% 
 % Configure limits for Bayesian Hyperparameter Optimization
 
@@ -87,13 +88,15 @@ validationRMSE_GP = sqrt(kfoldLoss(partitionedModel_GP, 'LossFun', crossValidati
 % Save the Trained Models and Model Selection Plots.
 
 %save trained models and figures 1 & 2
-save("trainedModels/regressionEnsemble","regressionEnsemble","validationRMSE_RF");
-save("trainedModels/regressionGP","regressionGP","validationRMSE_GP");
-saveas(figure(1),'trainedModels/regressionEnsemble_hyperparameter_tuning.png');
-saveas(figure(2),'trainedModels/regressionGP_hyperparameter_tuning.png');
+%save("trainedModels/regressionEnsemble","regressionEnsemble","validationRMSE_RF");
+%save("trainedModels/regressionGP","regressionGP","validationRMSE_GP");
+%saveas(figure(3),'trainedModels/regressionEnsemble_hyperparameter_tuning.png');
+%saveas(figure(4),'trainedModels/regressionGP_hyperparameter_tuning.png');
 %% 
 % With EnsembleTree we can look to understand the feature Importance.
 
 [imp,ma] = predictorImportance(regressionEnsemble)
+%%
+
 %% 
 %
