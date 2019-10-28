@@ -154,7 +154,7 @@ title("Feature Importance based on EnsembleTree")
 % results. 
 
 %Select the top important features and train both models again
-topImportantFeatures = 5;
+topImportantFeatures = 6;
 [kImp,I] = maxk(imp,topImportantFeatures);
 topKpredictors = inputTable(:, I);
 topKpredictorNames = predictorNames(I)
@@ -185,8 +185,8 @@ validationPredictions_RF = kfoldPredict(partitionedModel_RFTopK);
 validationPredictions_GP = kfoldPredict(partitionedModel_GPTopK);
 
 % Compute validation RMSE
-validationRMSE_RFTopK = sqrt(kfoldLoss(partitionedModel_RFTopK, 'LossFun', crossValidationLossFun))
-validationRMSE_GPTopK = sqrt(kfoldLoss(partitionedModel_GPTopK, 'LossFun', crossValidationLossFun))
+validationRMSE_RFTopK = sqrt(kfoldLoss(partitionedModel_RFTopK, 'LossFun', crossValidationLossFun));
+validationRMSE_GPTopK = sqrt(kfoldLoss(partitionedModel_GPTopK, 'LossFun', crossValidationLossFun));
 %% 
 % We can see that there is a drop is RMSE for the EnsembleTree Regressor however 
 % it is minimal. This tells us that the 5 most important features are capturing 
@@ -195,4 +195,6 @@ validationRMSE_GPTopK = sqrt(kfoldLoss(partitionedModel_GPTopK, 'LossFun', cross
 validationRMSE_RF, validationRMSE_RFTopK
 validationRMSE_GP, validationRMSE_GPTopK
 %% 
-%
+% Interestingly we see a small performance drop for the EnsembleTree model when 
+% we use the top 5 important features however the performance of the gaussianProcess 
+% model is increased by ~ 0.5.
