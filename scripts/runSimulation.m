@@ -15,13 +15,30 @@ response = inputTable.Concrete_Compressive_Strength_Mpa;
 %Print out head of table
 display(inputTable(1:10,:))
 %% 
+% Get summary statistics of initial dataset
+summaryStats = varfun(@(x) [mean(x); std(x); min(x); quantile(x,0.25); quantile(x,0.5); quantile(x,0.75); max(x)],predictors);
+summaryStats.Properties.RowNames = {'mean', 'std', 'min', '25%', '50%', '75%', 'max'};
+summaryStats.Properties.VariableNames = extractAfter(summaryStats.Properties.VariableNames,'Fun_');
+
+display(summaryStats);
+writetable(summaryStats, '../output/summary_stats.csv', 'WriteRowNames', true);
+%% 
 % Build box plot of dataset - standard EDA activities to gain an understanding 
 % of what the dataset looks like
 
-boxplot(table2array(predictors),'Labels',predictorNames);
+boxplot(table2array(predictors(:,1:7)),'Labels', {'Cement','Blast Furnace Slag','Fly Ash','Water','Super Plasticizer','Coarse Aggregate','Fine Aggregate'});
 h = gcf;
 h.Position(3) = h.Position(3)*2.5;
-title('Predictor Box Plots');
+xlabel('Predictor Variables');
+ylabel('kgm^{3}');
+title('Predictor Variables Box Plots');
+saveas(h, '../output/box_plots.png');
+%% 
+hist = histogram(predictors.(8))
+xlabel('Age (days)');
+ylabel('Frequency');
+title('Distribution of Age Values');
+saveas(hist, '../output/age_days_histogram.png');
 %% 
 % Next we generate a cross-correlation plot for all features and the response 
 % variable. A correlation matrix has also been generated. These can be used to 
