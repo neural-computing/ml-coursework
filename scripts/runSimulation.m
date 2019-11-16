@@ -161,10 +161,11 @@ validationRMSE_GP = sqrt(kfoldLoss(partitionedModel_GP, 'LossFun', crossValidati
 % With EnsembleTree we can look to understand the feature Importance.
 
 [imp,ma] = predictorImportance(regressionEnsemble)
-barh(imp);
-yticklabels(predictorNames)
+feat_imp = barh(imp);
+yticklabels({'Cement','Blast Furnace Slag','Fly Ash','Water','Super Plasticizer','Coarse Aggregate','Fine Aggregate','Age'})
 xlabel("Feature Importance")
-title("Feature Importance based on EnsembleTree")
+title("Random Forest Model Feature Importance")
+saveas(feat_imp, '../output/rf_feature_importance.png');
 %% 
 % We can see that 5 for the features are more important than the others. Lets 
 % try training again with these 5 most important features, perform xval and evaluate 
